@@ -1,175 +1,85 @@
 package service;
 
-import businesslogic.Util;
+import businesslogic.SessionUtil;
 import dao.EmployeeDAO;
 import entity.Employee;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeService extends Util implements EmployeeDAO{
-
-    //private Connection connection = getConnection();
+public class EmployeeService extends SessionUtil implements EmployeeDAO{
 
     @Override
     public void addEmployee(Employee employee) throws SQLException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
+        // open session with transaction
+        openTransactionSession();
 
-        String sql = "INSERT INTO employee (employee_id, first_name, last_name, birthday, address_id) VALUES (?, ?, ?, ?, ?)";
+        Session session = getSession();
+        session.save(employee);
 
-        try {
-            connection = getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setInt(1, employee.getEmployeeID());
-            preparedStatement.setString(2, employee.getFirstName());
-            preparedStatement.setString(3, employee.getLastName());
-            preparedStatement.setDate(4, employee.getBirthday());
-            //preparedStatement.setInt(5, employee.getAddressID());
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        }
+        // close session with transaction
+        closeTransactionSession();
     }
 
     @Override
     public List<Employee> getAllEmployees() throws SQLException {
-        List<Employee> employeeList = new ArrayList<>();
+        // open session with transaction
+        openTransactionSession();
 
-        String sql = "SELECT employee_id, first_name, last_name, birthday, address_id FROM employee";
+        String sql = "SELECT * FROM employee";
 
-        Connection connection = null;
-        Statement statement = null;
+        Session session = getSession();
+        Query query = session.createNativeQuery(sql).addEntity(Employee.class);
+        List<Employee> employeeList = query.list();
 
-        try {
-            connection = getConnection();
-            statement = connection.createStatement();
-
-            ResultSet resultSet = statement.executeQuery(sql);
-
-            while (resultSet.next()) {
-                Employee employee = new Employee();
-                employee.setEmployeeID(resultSet.getInt("employee_id"));
-                employee.setFirstName(resultSet.getString("first_name"));
-                employee.setLastName(resultSet.getString("last_name"));
-                employee.setBirthday(resultSet.getDate("birthday"));
-                //employee.setAddressID(resultSet.getInt("address_id"));
-
-                employeeList.add(employee);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        }
+        // close session with transaction
+        closeTransactionSession();
 
         return employeeList;
     }
 
     @Override
     public Employee getEmployeeById(int employeeID) throws SQLException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
+        // open session with transaction
+        openTransactionSession();
 
-        String sql = "SELECT employee_id, first_name, last_name, birthday, address_id FROM employee WHERE employee_id=?";
+        String sql = "SELECT * FROM employee WHERE employeeID = :employeeId";
 
-        Employee employee = new Employee();
+        Session session = getSession();
+        Query query = session.createNativeQuery(sql).addEntity(Employee.class);
+        query.setParameter("employeeId", employeeID);
 
-        try {
-            connection = getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, employeeID);
+        Employee employee = (Employee)query.getSingleResult();
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            employee.setEmployeeID(resultSet.getInt("employee_id"));
-            employee.setFirstName(resultSet.getString("first_name"));
-            employee.setLastName(resultSet.getString("last_name"));
-            employee.setBirthday(resultSet.getDate("birthday"));
-            //employee.setAddressID(resultSet.getInt("address_id"));
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        }
+        // close session with transaction
+        closeTransactionSession();
 
         return employee;
     }
 
     @Override
     public void updateEmployee(Employee employee) throws SQLException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
+        // open session with transaction
+        openTransactionSession();
 
-        String sql = "UPDATE employee SET first_name=?, last_name=?, birthday=?, address_id=? WHERE employee_id=?";
+        Session session = getSession();
+        session.update(employee);
 
-        try {
-            connection = getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setString(1,employee.getFirstName());
-            preparedStatement.setString(2,employee.getLastName());
-            preparedStatement.setDate(3,employee.getBirthday());
-            //preparedStatement.setInt(4,employee.getAddressID());
-            preparedStatement.setInt(5, employee.getEmployeeID());
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        }
+        // close session with transaction
+        closeTransactionSession();
     }
 
     @Override
     public void removeEmployee(Employee employee) throws SQLException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
+        // open session with transaction
+        openTransactionSession();
 
-        String sql = "DELETE FROM employee WHERE employee_id=?";
+        Session session = getSession();
+        session.remove(employee);
 
-        try {
-            connection = getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, employee.getEmployeeID());
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        }
+        // close session with transaction
+        closeTransactionSession();
     }
 }

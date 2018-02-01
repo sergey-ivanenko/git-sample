@@ -44,26 +44,6 @@ public class Project {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Project project = (Project) o;
-
-        if (projectID != project.projectID) return false;
-        if (title != null ? !title.equals(project.title) : project.title != null) return false;
-        return employees != null ? employees.equals(project.employees) : project.employees == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = projectID;
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (employees != null ? employees.hashCode() : 0);
-        return result;
-    }
-
-    @Override
     public String toString() {
         return "Project{" +
                 "projectID=" + projectID +

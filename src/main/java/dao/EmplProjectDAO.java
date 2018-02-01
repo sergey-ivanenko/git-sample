@@ -12,6 +12,7 @@ public interface EmplProjectDAO {
 
     // read
     List<EmplProject> getAllEmplProjects() throws SQLException;
+
     EmplProject getEmployeeAndProjectById(int employeeID, int projectID) throws SQLException;
 
     // update

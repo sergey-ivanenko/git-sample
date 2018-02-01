@@ -12,6 +12,7 @@ public interface AddressDAO {
 
     // read
     List<Address> getAllAddresses() throws SQLException;
+
     Address getAddressById(int addressID) throws SQLException;
 
     // update

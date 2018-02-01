@@ -84,32 +84,6 @@ public class Employee {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Employee employee = (Employee) o;
-
-        if (employeeID != employee.employeeID) return false;
-        if (firstName != null ? !firstName.equals(employee.firstName) : employee.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(employee.lastName) : employee.lastName != null) return false;
-        if (birthday != null ? !birthday.equals(employee.birthday) : employee.birthday != null) return false;
-        if (addressID != null ? !addressID.equals(employee.addressID) : employee.addressID != null) return false;
-        return projects != null ? projects.equals(employee.projects) : employee.projects == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = employeeID;
-        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
-        result = 31 * result + (addressID != null ? addressID.hashCode() : 0);
-        result = 31 * result + (projects != null ? projects.hashCode() : 0);
-        return result;
-    }
-
-    @Override
     public String toString() {
         return "Employee{" +
                 "employeeID=" + employeeID +

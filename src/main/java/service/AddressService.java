@@ -1,175 +1,86 @@
 package service;
 
-import businesslogic.Util;
+import businesslogic.SessionUtil;
 import dao.AddressDAO;
 import entity.Address;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
-public class AddressService extends Util implements AddressDAO{
-
-    //private Connection connection = getConnection();
+public class AddressService extends SessionUtil implements AddressDAO{
 
     @Override
     public void addAddress(Address address) throws SQLException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
+        // open session with transaction
+        openTransactionSession();
 
-        String sql = "INSERT INTO address (address_id, country, city, street, post_code) VALUES(?, ?, ?, ?, ?)";
+        Session session = getSession();
+        session.save(address);
 
-        try {
-            connection = getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setInt(1, address.getAddressID());
-            preparedStatement.setString(2, address.getCountry());
-            preparedStatement.setString(3, address.getCity());
-            preparedStatement.setString(4, address.getStreet());
-            preparedStatement.setString(5, address.getPostCode());
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        }
+        // close session with transaction
+        closeTransactionSession();
     }
 
     @Override
     public List<Address> getAllAddresses() throws SQLException {
-        List<Address> addressList = new ArrayList<>();
+        // open session with transaction
+        openTransactionSession();
 
-        String sql = "SELECT address_id, country, city, street, post_code FROM address";
+        String sql = "SELECT * FROM adress";
 
-        Connection connection = null;
-        Statement statement = null;
+        Session session = getSession();
+        Query query = session.createNativeQuery(sql).addEntity(Address.class);
 
-        try {
-            connection = getConnection();
-            statement = connection.createStatement();
+        List<Address> addressList = query.list();
 
-            ResultSet resultSet = statement.executeQuery(sql);
-
-            while (resultSet.next()) {
-                Address address = new Address();
-                address.setAddressID(resultSet.getInt("address_id"));
-                address.setCountry(resultSet.getString("country"));
-                address.setCity(resultSet.getString("city"));
-                address.setStreet(resultSet.getString("street"));
-                address.setPostCode(resultSet.getString("post_code"));
-
-                addressList.add(address);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        }
+        // close session with transaction
+        closeTransactionSession();
 
         return addressList;
     }
 
     @Override
     public Address getAddressById(int addressID) throws SQLException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
+        // open session with transaction
+        openTransactionSession();
 
-        String sql = "SELECT address_id, country, city, street, post_code FROM address WHERE address_id=?";
+        String sql = "SELECT * FROM address WHERE addressID = :addressId";
 
-        Address address = new Address();
+        Session session = getSession();
+        Query query = session.createNativeQuery(sql).addEntity(Address.class);
+        query.setParameter("addressId", addressID);
 
-        try {
-            connection = getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, addressID);
+        Address address = (Address)query.getSingleResult();
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            address.setAddressID(resultSet.getInt("address_id"));
-            address.setCountry(resultSet.getString("country"));
-            address.setCity(resultSet.getString("city"));
-            address.setStreet(resultSet.getString("street"));
-            address.setPostCode(resultSet.getString("post_code"));
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        }
+        // close session with transaction
+        closeTransactionSession();
 
         return address;
     }
 
     @Override
     public void updateAddress(Address address) throws SQLException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
+        // open session with transaction
+        openTransactionSession();
 
-        String sql = "UPDATE address SET country=?, city=?, street=?, post_code=? WHERE address_id=?";
+        Session session = getSession();
+        session.update(address);
 
-        try {
-            connection = getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setString(1,address.getCountry());
-            preparedStatement.setString(2,address.getCity());
-            preparedStatement.setString(3,address.getStreet());
-            preparedStatement.setString(4,address.getPostCode());
-            preparedStatement.setInt(5, address.getAddressID());
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        }
+        // close session with transaction
+        closeTransactionSession();
     }
 
     @Override
     public void removeAddress(Address address) throws SQLException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
+        // open session with transaction
+        openTransactionSession();
 
-        String sql = "DELETE FROM address WHERE address_id=?";
+        Session session = getSession();
+        session.remove(address);
 
-        try {
-            connection = getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, address.getAddressID());
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        }
+        // close session with transaction
+        closeTransactionSession();
     }
 }
