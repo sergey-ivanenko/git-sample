@@ -1,6 +1,7 @@
 package entity;
 
 import java.sql.Date;
+import java.util.Set;
 
 public class Employee {
 
@@ -8,7 +9,8 @@ public class Employee {
     private String firstName;
     private String lastName;
     private Date birthday;
-    private int addressID;
+    private Address addressID;
+    private Set<Project> projects;
 
     public Employee() {
     }
@@ -45,12 +47,20 @@ public class Employee {
         this.birthday = birthday;
     }
 
-    public int getAddressID() {
+    public Address getAddressID() {
         return addressID;
     }
 
-    public void setAddressID(int addressID) {
+    public void setAddressID(Address addressID) {
         this.addressID = addressID;
+    }
+
+    public Set<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
     }
 
     @Override
@@ -61,10 +71,11 @@ public class Employee {
         Employee employee = (Employee) o;
 
         if (employeeID != employee.employeeID) return false;
-        if (addressID != employee.addressID) return false;
         if (firstName != null ? !firstName.equals(employee.firstName) : employee.firstName != null) return false;
         if (lastName != null ? !lastName.equals(employee.lastName) : employee.lastName != null) return false;
-        return birthday != null ? birthday.equals(employee.birthday) : employee.birthday == null;
+        if (birthday != null ? !birthday.equals(employee.birthday) : employee.birthday != null) return false;
+        if (addressID != null ? !addressID.equals(employee.addressID) : employee.addressID != null) return false;
+        return projects != null ? projects.equals(employee.projects) : employee.projects == null;
     }
 
     @Override
@@ -73,7 +84,8 @@ public class Employee {
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
-        result = 31 * result + addressID;
+        result = 31 * result + (addressID != null ? addressID.hashCode() : 0);
+        result = 31 * result + (projects != null ? projects.hashCode() : 0);
         return result;
     }
 

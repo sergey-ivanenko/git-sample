@@ -27,7 +27,7 @@ public class EmployeeService extends Util implements EmployeeDAO{
             preparedStatement.setString(2, employee.getFirstName());
             preparedStatement.setString(3, employee.getLastName());
             preparedStatement.setDate(4, employee.getBirthday());
-            preparedStatement.setInt(5, employee.getAddressID());
+            //preparedStatement.setInt(5, employee.getAddressID());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -63,7 +63,7 @@ public class EmployeeService extends Util implements EmployeeDAO{
                 employee.setFirstName(resultSet.getString("first_name"));
                 employee.setLastName(resultSet.getString("last_name"));
                 employee.setBirthday(resultSet.getDate("birthday"));
-                employee.setAddressID(resultSet.getInt("address_id"));
+                //employee.setAddressID(resultSet.getInt("address_id"));
 
                 employeeList.add(employee);
             }
@@ -101,7 +101,7 @@ public class EmployeeService extends Util implements EmployeeDAO{
             employee.setFirstName(resultSet.getString("first_name"));
             employee.setLastName(resultSet.getString("last_name"));
             employee.setBirthday(resultSet.getDate("birthday"));
-            employee.setAddressID(resultSet.getInt("address_id"));
+            //employee.setAddressID(resultSet.getInt("address_id"));
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -132,7 +132,7 @@ public class EmployeeService extends Util implements EmployeeDAO{
             preparedStatement.setString(1,employee.getFirstName());
             preparedStatement.setString(2,employee.getLastName());
             preparedStatement.setDate(3,employee.getBirthday());
-            preparedStatement.setInt(4,employee.getAddressID());
+            //preparedStatement.setInt(4,employee.getAddressID());
             preparedStatement.setInt(5, employee.getEmployeeID());
 
             preparedStatement.executeUpdate();

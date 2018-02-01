@@ -38,7 +38,7 @@ public class Domain {
         calendar.set(1939, Calendar.MAY, 1);
 
         employee.setBirthday(new Date(calendar.getTime().getTime()));
-        employee.setAddressID(address.getAddressID());
+        //employee.setAddressID(address.getAddressID());
 
         Project project = new Project();
         project.setProjectID(1);
