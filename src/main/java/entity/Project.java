@@ -1,10 +1,19 @@
 package entity;
 
+import javax.persistence.*;
 import java.util.Set;
 
+@Entity
+@Table(name = "project")
 public class Project {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int projectID;
+
+    @Column(name = "title")
     private String title;
+
+    @ManyToMany(mappedBy = "projects")
     private Set<Employee>employees;
 
     public Project() {

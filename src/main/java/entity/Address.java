@@ -1,11 +1,25 @@
 package entity;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "address")
 public class Address {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int addressID;
+
+    @Column(name = "country")
     private String country;
+
+    @Column(name = "city")
     private String city;
+
+    @Column(name = "street")
     private String street;
+
+    @Column(name = "post_code", length = 10)
     private String postCode;
 
     public Address() {

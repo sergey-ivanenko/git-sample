@@ -1,15 +1,35 @@
 package entity;
 
+import javax.persistence.*;
 import java.sql.Date;
 import java.util.Set;
 
+@Entity
+@Table(name = "employee")
 public class Employee {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int employeeID;
+
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "birthday")
     private Date birthday;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Address addressID;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "empl_project",
+            joinColumns = @JoinColumn(name = "empl_id"),
+            inverseJoinColumns = @JoinColumn(name = "proj_id")
+    )
     private Set<Project> projects;
 
     public Employee() {
