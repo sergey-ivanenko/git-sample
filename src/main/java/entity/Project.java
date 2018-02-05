@@ -1,13 +1,16 @@
 package entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Table(name = "project")
-public class Project {
+public class Project implements Serializable{
+
+    private static final long serialVersionUID = 1796556740932985128L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int projectID;
 
     @Column(name = "title")

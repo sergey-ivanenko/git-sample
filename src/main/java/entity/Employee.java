@@ -1,15 +1,17 @@
 package entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.Set;
 
 @Entity
 @Table(name = "employee")
-public class Employee {
+public class Employee implements Serializable{
+
+    private static final long serialVersionUID = -7544538017359643203L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int employeeID;
 
     @Column(name = "first_name")
